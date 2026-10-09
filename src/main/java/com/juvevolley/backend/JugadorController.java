@@ -8,6 +8,7 @@ package com.juvevolley.backend;
  *
  * @author lovex
  */
+import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,7 +64,7 @@ public class JugadorController {
                 nuevo.setFoto("default.webp");
             }
             return repository.save(nuevo);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("Error guardando la imagen", e);
         }
     }
@@ -90,6 +91,13 @@ public class JugadorController {
         existente.setPosSecundaria(actualizacion.getPosSecundaria());
         existente.setFrase(actualizacion.getFrase());
         existente.setCoachDato(actualizacion.getCoachDato());
+        existente.setTipoDocumento(actualizacion.getTipoDocumento());
+        existente.setDocumento(actualizacion.getDocumento());
+        existente.setFechaNacimiento(actualizacion.getFechaNacimiento());
+        existente.setEps(actualizacion.getEps());
+        existente.setRh(actualizacion.getRh());
+        existente.setPeso(actualizacion.getPeso());
+        existente.setManoDominante(actualizacion.getManoDominante());
 
         // 3. Solo guardamos foto nueva SI el usuario subió una
         try {
@@ -99,7 +107,7 @@ public class JugadorController {
                 java.nio.file.Files.write(ruta, archivo.getBytes());
                 existente.setFoto(nombreArchivo); // Pisamos la foto vieja
             }
-        } catch (Exception e) {}
+        } catch (IOException e) {}
 
         // 4. Guardamos los cambios
         return repository.save(existente);
