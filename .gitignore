@@ -34,3 +34,8 @@ build/
 
 # Carpeta de fotos locales del club
 imagenes_juve/  
+
+/target/
+/imagenes_juve/
+nbactions.xml
+nb-configuration.xml

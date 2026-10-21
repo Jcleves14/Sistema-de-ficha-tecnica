@@ -99,15 +99,26 @@ public class JugadorController {
         existente.setPeso(actualizacion.getPeso());
         existente.setManoDominante(actualizacion.getManoDominante());
 
-        // 3. Solo guardamos foto nueva SI el usuario subió una
-        try {
-            if (archivo != null && !archivo.isEmpty()) {
-                String nombreArchivo = java.util.UUID.randomUUID().toString() + ".webp";
-                java.nio.file.Path ruta = java.nio.file.Paths.get("imagenes_juve").resolve(nombreArchivo);
-                java.nio.file.Files.write(ruta, archivo.getBytes());
-                existente.setFoto(nombreArchivo); // Pisamos la foto vieja
-            }
-        } catch (IOException e) {}
+      // 3. Solo guardamos foto nueva SI el usuario subió una
+try {
+    if (archivo != null && !archivo.isEmpty()) {
+        
+        // --- NUEVO: BORRAMOS LA FOTO VIEJA ANTES DE GUARDAR LA NUEVA ---
+        if (existente.getFoto() != null && !existente.getFoto().equals("default.webp")) {
+            java.nio.file.Path rutaVieja = java.nio.file.Paths.get("imagenes_juve").resolve(existente.getFoto());
+            java.nio.file.Files.deleteIfExists(rutaVieja);
+        }
+        // ----------------------------------------------------------------
+        
+        String nombreArchivo = java.util.UUID.randomUUID().toString() + ".webp";
+        java.nio.file.Path ruta = java.nio.file.Paths.get("imagenes_juve").resolve(nombreArchivo);
+        java.nio.file.Files.write(ruta, archivo.getBytes());
+        existente.setFoto(nombreArchivo); // Pisamos la foto vieja
+    }
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Error al guardar o borrar la foto", e);
+    }
 
         // 4. Guardamos los cambios
         return repository.save(existente);
