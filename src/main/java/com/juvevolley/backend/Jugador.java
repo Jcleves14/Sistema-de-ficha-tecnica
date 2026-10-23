@@ -3,6 +3,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class Jugador {
@@ -16,9 +19,17 @@ public class Jugador {
     // ==========================================
 
     // Deportivos y Perfil
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
     private String apodo;
+    
+    @NotNull(message = "El número es obligatorio")
+    @Min(value = 0, message = "El número no puede ser negativo")    
+    
     private Integer numero;
+    @NotNull(message = "La edad es obligatoria")
+    @Min(value = 4, message = "La edad mínima requerida es 4 años")
+    
     private Integer edad;
     private String categoria;
     private String foto;
